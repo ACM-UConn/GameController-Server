@@ -3,9 +3,9 @@ Mobile Client for GameController App
 
 ## Required packages:
 
+- Electron
 - Typescript
 - Copyfiles
-- Electron
 
 ## Potential packages (pending):
 
