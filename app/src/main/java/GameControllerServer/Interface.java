@@ -1,16 +1,102 @@
 package GameControllerServer;
 
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
 import javafx.application.*;
 import com.google.zxing.*;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+import javafx.scene.image.ImageView;
+import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
+import javafx.scene.layout.VBox;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
+
 
 // Create interface for app. Follows same steps as App
-// Act out these steps using other files based on what App is telling you: Start interface, initiate connection, open game screen, start playing.
+// Act out these steps using other files based on what App is telling you:
+// Start interface, initiate connection, open game screen, start playing.
 
-public class Interface {
-    int x = 0;
-    
+public class Interface extends Application{
+
+    Stage home;
+    Scene scene1, scene2;
+
+    Button nextScreen;
+    //Launches Interface
     public static void main(String[] args) {
-        Interface myObj = new Interface();
-        System.out.println(myObj.x);
+        launch(args);
     }
+
+    //Main
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+        home = primaryStage;
+        //QR Code generator
+
+
+        String URL = "https://youtu.be/oHg5SJYRHA0";
+        QRCodeWriter writer = new QRCodeWriter();
+        int QRwidth = 300;
+        int QRheight = 300;
+
+        BufferedImage bufferedImage = null;
+
+        try {
+            BitMatrix byteMatrix = writer.encode(URL, BarcodeFormat.QR_CODE, QRwidth, QRheight);
+            bufferedImage = new BufferedImage(QRwidth, QRheight, BufferedImage.TYPE_INT_RGB);
+            bufferedImage.createGraphics();
+
+            Graphics2D graphics = (Graphics2D) bufferedImage.getGraphics();
+            graphics.setColor(Color.WHITE);
+            graphics.fillRect(0, 0, QRwidth, QRheight);
+            graphics.setColor(Color.BLACK);
+
+            for (int i = 0; i < QRheight; i++) {
+                for (int j = 0; j < QRwidth; j++) {
+                    if (byteMatrix.get(i, j)) {
+                        graphics.fillRect(i, j, 1, 1);
+                    }
+                }
+            }
+
+        } catch (WriterException ex) {
+            ex.printStackTrace();
+        }
+
+        //Interface
+        ImageView qrView = new ImageView();
+        qrView.setImage(SwingFXUtils.toFXImage(bufferedImage, null));
+
+        ImageView SANIC = new ImageView(new Image("https://i.kym-cdn.com/photos/images/newsfeed/000/472/021/b85.gif"));
+
+        //Button Click
+
+        nextScreen = new Button("Next Page");
+        nextScreen.setOnAction(e -> home.setScene(scene2));
+
+        //QR Code Screen
+
+        VBox Vlayout = new VBox(20);
+        Vlayout.getChildren().addAll(qrView,nextScreen);
+        scene1 = new Scene(Vlayout,800,800);
+
+        //Next Screen
+        StackPane layout = new StackPane();
+        layout.getChildren().add(SANIC);
+        scene2 = new Scene(layout, 800, 800);
+
+        home.setTitle("GameController");
+        home.setScene(scene1);
+        home.show();
+
+    }
+
 }
