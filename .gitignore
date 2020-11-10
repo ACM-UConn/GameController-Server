@@ -100,3 +100,7 @@ gradle-app.setting
 
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
+
+# Connection Test Initializer Class
+app/src/main/java/GameControllerServer/connection/test/ConnectionInitializerTest.java
+app/src/main/java/GameControllerServer/connection/test/js/node_modules/
