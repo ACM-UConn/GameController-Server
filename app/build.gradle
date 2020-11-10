@@ -8,21 +8,31 @@
 
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
-    id 'application'
+    id 'java'
 
     // Plugin for JavaFX
     id 'org.openjfx.javafxplugin' version '0.0.9'
+    id 'org.beryx.jlink' version '2.22.2'
+    id 'application'
 }
 
 repositories {
     // Use JCenter and Maven for resolving dependencies.
     jcenter()
     mavenCentral()
+    maven { url 'https://m1ke.co/gradle/repo' }
 }
 
 dependencies {
     // Use JUnit test framework.
     testImplementation 'junit:junit:4.13'
+
+    // JavaEE WebSocket Dependencies
+    implementation 'javax.websocket:javax.websocket-api:1.1'
+    implementation 'org.eclipse.jetty.websocket:javax-websocket-server-impl:+'
+
+    // Utilities library
+    implementation 'co.m1ke:basic:0.4'
 
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:29.0-jre'
@@ -33,10 +43,10 @@ dependencies {
 
 javafx {
     version = "15.0.1"
-    modules = [ 'javafx.controls' ]
+    modules = [ 'javafx.graphics', 'javafx.swing', 'javafx.base', 'javafx.fxml',  'javafx.controls' ]
 }
 
 application {
     // Define the main class for the application.
-    mainClass = 'GameControllerServer.App'
+    mainClassName = 'GameControllerServer.Interface'
 }
