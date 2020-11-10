@@ -1,21 +1,18 @@
 package GameControllerServer;
 
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
-import javafx.application.*;
-import com.google.zxing.*;
+import javafx.application.Application;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
-import javafx.scene.image.ImageView;
-import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import java.util.concurrent.TimeUnit;
+import javafx.stage.Stage;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -76,7 +73,7 @@ public class Interface extends Application{
         ImageView qrView = new ImageView();
         qrView.setImage(SwingFXUtils.toFXImage(bufferedImage, null));
 
-        ImageView SANIC = new ImageView(new Image("https://i.kym-cdn.com/photos/images/newsfeed/000/472/021/b85.gif"));
+        ImageView SANIK = new ImageView(new Image("https://i.kym-cdn.com/photos/images/newsfeed/000/472/021/b85.gif"));
 
         //Button Click
 
@@ -91,7 +88,7 @@ public class Interface extends Application{
 
         //Next Screen
         StackPane layout = new StackPane();
-        layout.getChildren().add(SANIC);
+        layout.getChildren().add(SANIK);
         scene2 = new Scene(layout, 800, 800);
         boolean goToNextPage = false;
 
