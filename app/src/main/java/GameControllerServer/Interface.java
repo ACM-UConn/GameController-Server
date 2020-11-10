@@ -15,6 +15,7 @@ import javafx.scene.image.ImageView;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
+import java.util.concurrent.TimeUnit;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -27,7 +28,7 @@ import java.awt.image.BufferedImage;
 public class Interface extends Application{
 
     Stage home;
-    Scene scene1, scene2;
+    Scene scene1, scene2, scene3;
 
     Button nextScreen;
     //Launches Interface
@@ -92,6 +93,12 @@ public class Interface extends Application{
         StackPane layout = new StackPane();
         layout.getChildren().add(SANIC);
         scene2 = new Scene(layout, 800, 800);
+        boolean goToNextPage = false;
+
+        //Control Screen
+        StackPane mainPage = new StackPane();
+        scene3 = new Scene(mainPage, 800, 800);
+        home.setScene(scene3);
 
         home.setTitle("GameController");
         home.setScene(scene1);
