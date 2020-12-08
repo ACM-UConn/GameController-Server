@@ -1,19 +1,12 @@
 package GameControllerServer;
 
+import GameControllerServer.connection.Connection;
+import GameControllerServer.connection.event.ClientConnectedEvent;
+import GameControllerServer.connection.event.ClientDisconnectEvent;
 import co.m1ke.basic.events.EventManager;
 import co.m1ke.basic.events.interfaces.Event;
 import co.m1ke.basic.events.interfaces.EventListener;
 import co.m1ke.basic.logger.Logger;
-
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.util.concurrent.CompletableFuture;
-
-import GameControllerServer.connection.Connection;
-import GameControllerServer.connection.event.ClientCommunicationEvent;
-import GameControllerServer.connection.event.ClientConnectedEvent;
-import GameControllerServer.connection.event.ClientDisconnectEvent;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
@@ -21,12 +14,15 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import javafx.application.Application;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.image.Image;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * JavaFX Interface Management for UConn ACM <a href="https://github.com/ACM-UConn/GameController-Server">Game Controller Project</a>
@@ -37,16 +33,13 @@ public class Interface extends Application implements EventListener {
 
     private Stage home;
     private Scene initialScreen;
-    private Scene pendingScreen;
     private Scene controlScene;
-    private Button nextScreen;
+    private Scene disconnectScene;
 
     private Logger logger;
     private EventManager eventManager;
     private Connection connection;
     private boolean pendingConnection;
-
-    private final Object LOCK = new Object();
 
     //Launches Interface
     public static void main(String[] args) {
@@ -70,6 +63,7 @@ public class Interface extends Application implements EventListener {
         eventManager.getEventExecutor().registerListener(this);
 
         BufferedImage qrCode = getQrCode();
+
         if (qrCode == null) {
             // TODO: Display error on interface that it failed to generate a QR Code.
             return;
@@ -77,22 +71,14 @@ public class Interface extends Application implements EventListener {
 
         //Interface
         ImageView qrView = new ImageView(SwingFXUtils.toFXImage(qrCode, null));
-        ImageView sanik = new ImageView(new Image("https://i.kym-cdn.com/photos/images/newsfeed/000/472/021/b85.gif"));
-
-        //Button Click
-        nextScreen = new Button("Next Page");
-        nextScreen.setOnAction(e -> home.setScene(pendingScreen));
 
         //QR Code Screen
         VBox Vlayout = new VBox(20);
-        Vlayout.getChildren().addAll(qrView,nextScreen);
+        Vlayout.getChildren().addAll(qrView);
         initialScreen = new Scene(Vlayout,800,800);
 
-        //Next Screen
-        StackPane layout = new StackPane();
-        layout.getChildren().add(sanik);
-        pendingScreen = new Scene(layout, 800, 800);
-        boolean goToNextPage = false;
+        //Disconnect Screen
+
 
         //Control Screen
         StackPane mainPage = new StackPane();
@@ -110,18 +96,19 @@ public class Interface extends Application implements EventListener {
             return;
         }
 
+        pendingConnection = false;
         home.setScene(controlScene);
         home.show();
     }
 
     @Event
     public void onDisconnect(ClientDisconnectEvent event) {
-        // TODO: Handle client disconnection
-    }
-
-    @Event
-    public void onMessage(ClientCommunicationEvent event) {
-        // TODO: Display keystrokes or something on interface if you want
+        Label disconnectLabel = new Label("DISCONNECTED FROM GAME");
+        StackPane disconnectLayout = new StackPane();
+        disconnectLayout.getChildren().add(disconnectLabel);
+        disconnectScene = new Scene(disconnectLayout,800,800);
+        home.setScene(disconnectScene);
+        home.show();
     }
 
     /**
