@@ -62,8 +62,8 @@ public class Connection extends Listener {
     private final String SERVER_SESSION_ID = getRandomSessionId();
     private final ByteBuffer HEARTBEAT = ByteBuffer.wrap(SERVER_SESSION_ID.getBytes());
 
-    public Connection(boolean debug) {
-        super("Discovery", new EventManager(false));
+    public Connection(boolean debug, EventManager eventManager) {
+        super("Discovery", eventManager);
 
         this.port = 7070;
         this.debug = debug;
@@ -131,7 +131,6 @@ public class Connection extends Listener {
                     }));
 
             server.start();
-            server.join();
         } catch (Throwable e) {
             logger.except(new Exception(e), "Exception while initializing WebSocket server");
         }
@@ -203,6 +202,7 @@ public class Connection extends Listener {
         try {
             return "ws://" + InetAddress.getLocalHost().getHostAddress() + ":" + port + "/events/";
         } catch (UnknownHostException e) {
+            e.printStackTrace();
             return null;
         }
     }
